@@ -5,13 +5,15 @@ package cmd
 
 import (
 	"container/list"
+	"context"
 	"fmt"
+	"github.com/authzed/spicedb/pkg/schemadsl/compiler"
 	"github.com/authzed/spicedb/pkg/schemadsl/dslshape"
 	"github.com/authzed/spicedb/pkg/schemadsl/input"
 	"github.com/authzed/spicedb/pkg/schemadsl/parser"
+	"github.com/authzed/spicedb/pkg/schemautil"
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
-	"regexp"
 	"sort"
 	"spicedb-dsl-validator/cmd/flags"
 	"spicedb-dsl-validator/cmd/util"
@@ -114,47 +116,32 @@ var parseCmd = &cobra.Command{
 func parse(cmd *cobra.Command, args []string) {
 	filepath := flags.MustGetString("file-path", cmd.Flags())
 	verbose := flags.MustGetBool("verbose", cmd.Flags())
-	var schemacontent string
-	err := util.ReadFileValueString(filepath, &schemacontent)
+	var schemaContent string
+	err := util.ReadFileValueString(filepath, &schemaContent)
 	if err != nil {
 		glog.Error(err)
 	}
-	root := parser.Parse(createAstNode, input.Source(""), schemacontent)
+	root := parser.Parse(createAstNode, input.Source(""), schemaContent)
 	parseTree := getParseTree((root).(*sNode), 0)
 	found := strings.TrimSpace(parseTree)
 	if verbose {
 		fmt.Println(found)
 	}
-	if strings.Contains(found, "error-message") {
-		errorMessage, err := extractErrorMessage(found)
+	compiled, err := compiler.Compile(compiler.InputSchema{
+		Source:       input.Source("schema"),
+		SchemaString: schemaContent,
+	}, new(string))
+	if err != nil {
+		glog.Errorf("Complied error: %v", err)
+	}
+
+	if compiled != nil {
+		_, err := schemautil.ValidateSchemaChanges(context.Background(), compiled, false)
 		if err != nil {
-			fmt.Println("Error:", err)
-			return
+			glog.Errorf("Schema validation error: %v", err)
 		}
-		// Print the extracted error message
-		fmt.Println("Extracted Error Message:", errorMessage)
-	} else {
-		fmt.Println("Parsed correctly")
 	}
 
-}
-
-func extractErrorMessage(inputString string) (string, error) {
-	// Define a regular expression to capture the error message
-	re := regexp.MustCompile(`error-message\s*=\s*(.*)`)
-
-	// Find the first match
-	matches := re.FindStringSubmatch(inputString)
-
-	// Check if there is a match
-	if len(matches) < 2 {
-		return "", fmt.Errorf("No error message found")
-	}
-
-	// Extract and trim the error message
-	errorMessage := strings.TrimSpace(matches[1])
-
-	return errorMessage, nil
 }
 
 func init() {

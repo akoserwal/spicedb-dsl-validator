@@ -1,6 +1,9 @@
-# Spicedb Schema Parser CLI
+# SpiceDB Schema Parser & Validator CLI Tool
 
-A simple cli utility to verification the Spicedb schema DSL can be parsed or not.
+spicedb-dsl-validator is a CLI tool which parse and validate SpiceDB [schema](https://authzed.com/docs/guides/schema).
+
+## About SpiceDB
+[SpiceDB](https://authzed.com) is an open source, Google Zanzibar-inspired database for creating and managing security-critical application permissions.
 
 # Build
 `make binary`
@@ -10,13 +13,11 @@ A simple cli utility to verification the Spicedb schema DSL can be parsed or not
 Parsed Correctly
 ```agsl
 ./spicedb-dsl-validator parse --file-path tests/empty.zed 
-Parsed correctly
-
 ```
 
 Broken schema
 ```agsl
 ./spicedb-dsl-validator parse --file-path tests/broken.zed
-Extracted Error Message: Expected end of statement or definition, found: TokenTypeError
+E1220 22:57:11.609797    4216 parse.go:135] Complied error: parse error in `schema`, line 1, column 1: Expected end of statement or definition, found: TokenTypeError
 
 ```
