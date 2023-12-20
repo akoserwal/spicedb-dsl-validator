@@ -107,7 +107,7 @@ func getParseTree(currentNode *sNode, indentation int) string {
 var parseCmd = &cobra.Command{
 	Use:   "parse",
 	Short: "parse spicedb schema",
-	Long:  `./spicedb-dsl-validator parse --file-path /Users/akoserwa/contribute/spicedb-dsl-validator/tests/broken.zed`,
+	Long:  `./spicedb-dsl-validator parse --file-path tests/broken.zed`,
 	Run:   parse,
 }
 
