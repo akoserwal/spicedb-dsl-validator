@@ -2,7 +2,6 @@ package flags
 
 import (
 	"fmt"
-	"github.com/golang/glog"
 	"github.com/spf13/pflag"
 )
 
@@ -10,7 +9,7 @@ import (
 func MustGetDefinedString(flagName string, flags *pflag.FlagSet) string {
 	flagVal := MustGetString(flagName, flags)
 	if flagVal == "" {
-		glog.Fatal(undefinedValueMessage(flagName))
+		fmt.Println(undefinedValueMessage(flagName))
 	}
 	return flagVal
 }
@@ -19,7 +18,7 @@ func MustGetDefinedString(flagName string, flags *pflag.FlagSet) string {
 func MustGetString(flagName string, flags *pflag.FlagSet) string {
 	flagVal, err := flags.GetString(flagName)
 	if err != nil {
-		glog.Fatalf(notFoundMessage(flagName, err))
+		fmt.Println(notFoundMessage(flagName, err))
 	}
 	return flagVal
 }
@@ -28,7 +27,7 @@ func MustGetString(flagName string, flags *pflag.FlagSet) string {
 func MustGetBool(flagName string, flags *pflag.FlagSet) bool {
 	flagVal, err := flags.GetBool(flagName)
 	if err != nil {
-		glog.Fatalf(notFoundMessage(flagName, err))
+		fmt.Println(notFoundMessage(flagName, err))
 	}
 	return flagVal
 }
@@ -36,7 +35,7 @@ func MustGetBool(flagName string, flags *pflag.FlagSet) bool {
 func MustGetInt(flagName string, flags *pflag.FlagSet) int {
 	flagVal, err := flags.GetInt(flagName)
 	if err != nil {
-		glog.Fatalf(notFoundMessage(flagName, err))
+		fmt.Println(notFoundMessage(flagName, err))
 	}
 	return flagVal
 }

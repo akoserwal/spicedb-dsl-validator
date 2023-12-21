@@ -13,6 +13,14 @@ endif
 DOCKER ?= podman
 DOCKER_CONFIG="${PWD}/.podman"
 
+PKG         := ./cmd/...
+TAGS        :=
+TESTS       := .
+TESTFLAGS   := -race -v -failfast
+LDFLAGS     := -w -s
+GOFLAGS     :=
+CGO_ENABLED ?= 0
+
 lint:
 	golangci-lint run ./...
 .PHONY: lint
@@ -21,13 +29,7 @@ binary:
 	$(GO) build
 .PHONY: binary
 
-
-
-
-
-
-
-
-
-
+test:
+	$(GO) clean -testcache && go test $(GOFLAGS) -run $(TESTS) $(PKG) $(TESTFLAGS)
+.PHONY: test
 

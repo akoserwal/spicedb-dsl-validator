@@ -12,7 +12,6 @@ import (
 	"github.com/authzed/spicedb/pkg/schemadsl/input"
 	"github.com/authzed/spicedb/pkg/schemadsl/parser"
 	"github.com/authzed/spicedb/pkg/schemautil"
-	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	"sort"
 	"spicedb-dsl-validator/cmd/flags"
@@ -77,7 +76,6 @@ func getParseTree(currentNode *sNode, indentation int) string {
 	}
 
 	sort.Strings(keys)
-	//NodeTypeError //error-message
 	for _, key := range keys {
 		parseTree = parseTree + strings.Repeat(" ", indentation+2)
 		parseTree = parseTree + fmt.Sprintf("%s = %v", key, currentNode.properties[key])
@@ -116,10 +114,12 @@ var parseCmd = &cobra.Command{
 func parse(cmd *cobra.Command, args []string) {
 	filepath := flags.MustGetString("file-path", cmd.Flags())
 	verbose := flags.MustGetBool("verbose", cmd.Flags())
+	parseonly := flags.MustGetBool("parse-only", cmd.Flags())
+
 	var schemaContent string
 	err := util.ReadFileValueString(filepath, &schemaContent)
 	if err != nil {
-		glog.Error(err)
+		fmt.Println(err)
 	}
 	root := parser.Parse(createAstNode, input.Source(""), schemaContent)
 	parseTree := getParseTree((root).(*sNode), 0)
@@ -127,18 +127,24 @@ func parse(cmd *cobra.Command, args []string) {
 	if verbose {
 		fmt.Println(found)
 	}
-	compiled, err := compiler.Compile(compiler.InputSchema{
-		Source:       input.Source("schema"),
-		SchemaString: schemaContent,
-	}, new(string))
-	if err != nil {
-		glog.Errorf("Complied error: %v", err)
-	}
-
-	if compiled != nil {
-		_, err := schemautil.ValidateSchemaChanges(context.Background(), compiled, false)
+	if parseonly {
+		fmt.Println(found)
+	} else {
+		compiled, err := compiler.Compile(compiler.InputSchema{
+			Source:       input.Source("schema"),
+			SchemaString: schemaContent,
+		}, new(string))
 		if err != nil {
-			glog.Errorf("Schema validation error: %v", err)
+			fmt.Fprintf(cmd.OutOrStdout(), "Complied error %s", err)
+			//logger.Err(err).Msg("Complied error")
+		}
+
+		if compiled != nil {
+			_, err := schemautil.ValidateSchemaChanges(context.Background(), compiled, false)
+			if err != nil {
+				fmt.Fprintf(cmd.OutOrStdout(), "Schema validation error %s", err)
+				//logger.Err(err).Msg("Schema validation error")
+			}
 		}
 	}
 
@@ -146,8 +152,9 @@ func parse(cmd *cobra.Command, args []string) {
 
 func init() {
 	rootCmd.AddCommand(parseCmd)
-	parseCmd.PersistentFlags().String("file-path", "", "zed schema file")
+	parseCmd.PersistentFlags().StringP("file-path", "f", "", "zed schema file path")
 	parseCmd.PersistentFlags().BoolP("verbose", "v", false, "verbose output")
+	parseCmd.PersistentFlags().BoolP("parse-only", "p", false, "only parsed output")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
