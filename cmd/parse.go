@@ -135,15 +135,13 @@ func parse(cmd *cobra.Command, args []string) {
 			SchemaString: schemaContent,
 		}, new(string))
 		if err != nil {
-			fmt.Fprintf(cmd.OutOrStdout(), "Complied error %s", err)
-			//logger.Err(err).Msg("Complied error")
+			fmt.Fprintf(cmd.OutOrStdout(), "Complied error: %v\n", err)
 		}
 
 		if compiled != nil {
 			_, err := schemautil.ValidateSchemaChanges(context.Background(), compiled, false)
 			if err != nil {
-				fmt.Fprintf(cmd.OutOrStdout(), "Schema validation error %s", err)
-				//logger.Err(err).Msg("Schema validation error")
+				fmt.Fprintf(cmd.OutOrStdout(), "Schema validation error: %v\n", err)
 			}
 		}
 	}

@@ -23,7 +23,7 @@ func TestParseCmd(t *testing.T) {
 		{
 			name:           "Invalid parse",
 			args:           []string{"parse", "--file-path", "tests/broken.zed"},
-			expectedOutput: "Complied error parse error in `schema`, line 1, column 1: Expected end of statement or definition, found: TokenTypeError", // Add the expected error message
+			expectedOutput: "Complied error: parse error in `schema`, line 1, column 1: Expected end of statement or definition, found: TokenTypeError\n", // Add the expected error message
 		},
 		// Add more test cases as needed
 	}
