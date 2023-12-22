@@ -3,9 +3,10 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"testing"
+
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestParseCmd(t *testing.T) {

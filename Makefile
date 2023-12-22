@@ -33,7 +33,7 @@ lint:
 .PHONY: lint
 
 binary:
-	$(GO) build -o -ldflags="-s -w -X main.version=$(VERSION)"
+	$(GO) build -ldflags="-s -w -X main.version=$(VERSION)"
 .PHONY: binary
 
 binary/darwin:

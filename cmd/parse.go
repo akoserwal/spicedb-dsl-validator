@@ -4,6 +4,9 @@ import (
 	"container/list"
 	"context"
 	"fmt"
+	"sort"
+	"strings"
+
 	"github.com/akoserwal/spicedb-dsl-validator/cmd/flags"
 	"github.com/akoserwal/spicedb-dsl-validator/cmd/util"
 	"github.com/authzed/spicedb/pkg/schemadsl/compiler"
@@ -12,8 +15,6 @@ import (
 	"github.com/authzed/spicedb/pkg/schemadsl/parser"
 	"github.com/authzed/spicedb/pkg/schemautil"
 	"github.com/spf13/cobra"
-	"sort"
-	"strings"
 )
 
 type sNode struct {

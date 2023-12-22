@@ -4,15 +4,16 @@ Copyright © 2023 Abhishek Koserwal
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "spicedb-dsl-validator",
-	Short: "parse the spicedb schema and validate format",
-	Long: `parse the spicedb schema and validate format. For example
+	Short: "A cli tool to parse and validate spicedb schema",
+	Long: `A cli tool to parse and validate spicedb schema. For example
  ./spicedb-dsl-validator parse --file-path cmd/tests/empty.zed `,
 }
 
