@@ -4,23 +4,16 @@ Copyright © 2023 Abhishek Koserwal
 package cmd
 
 import (
-	"os"
-
 	"github.com/spf13/cobra"
+	"os"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "spicedb-dsl-validator",
 	Short: "parse the spicedb schema and validate format",
-	Long: `parse the spicedb schema and validate format. For example:
-
-Spicedb schema is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-
+	Long: `parse the spicedb schema and validate format. For example
+ ./spicedb-dsl-validator parse --file-path cmd/tests/empty.zed `,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

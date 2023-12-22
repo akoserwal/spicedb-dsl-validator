@@ -1,8 +1,7 @@
 package util
 
 import (
-	"github.com/rs/zerolog/log"
-	"io/ioutil"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -14,7 +13,8 @@ var projectRootDirectory = GetProjectRootDir()
 func GetProjectRootDir() string {
 	workingDir, err := os.Getwd()
 	if err != nil {
-		log.Err(err)
+		e := fmt.Errorf("project dir :%s", err)
+		fmt.Println(e)
 	}
 	dirs := strings.Split(workingDir, "/")
 	var goModPath string
@@ -22,7 +22,7 @@ func GetProjectRootDir() string {
 	for _, d := range dirs {
 		rootPath = rootPath + "/" + d
 		goModPath = rootPath + "/go.mod"
-		_, err := ioutil.ReadFile(goModPath)
+		_, err := os.ReadFile(goModPath)
 		if err != nil { // if the file doesn't exist, continue searching
 			continue
 		}
@@ -50,7 +50,7 @@ func readFile(file string) (string, error) {
 	}
 
 	// Read the file
-	buf, err := ioutil.ReadFile(absFilePath)
+	buf, err := os.ReadFile(absFilePath)
 	if err != nil {
 		return "", err
 	}
