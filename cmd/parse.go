@@ -4,6 +4,8 @@ import (
 	"container/list"
 	"context"
 	"fmt"
+	"github.com/akoserwal/spicedb-dsl-validator/cmd/flags"
+	"github.com/akoserwal/spicedb-dsl-validator/cmd/util"
 	"github.com/authzed/spicedb/pkg/schemadsl/compiler"
 	"github.com/authzed/spicedb/pkg/schemadsl/dslshape"
 	"github.com/authzed/spicedb/pkg/schemadsl/input"
@@ -11,8 +13,6 @@ import (
 	"github.com/authzed/spicedb/pkg/schemautil"
 	"github.com/spf13/cobra"
 	"sort"
-	"spicedb-dsl-validator/cmd/flags"
-	"spicedb-dsl-validator/cmd/util"
 	"strings"
 )
 

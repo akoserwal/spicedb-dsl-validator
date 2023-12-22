@@ -1,4 +1,4 @@
-module spicedb-dsl-validator
+module github.com/akoserwal/spicedb-dsl-validator
 
 go 1.21.4
 

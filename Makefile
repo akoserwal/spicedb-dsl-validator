@@ -29,6 +29,10 @@ binary:
 	$(GO) build
 .PHONY: binary
 
+binary/linux:
+	GOOS=linux GOARCH=amd64 $(GO) build -o spicedb-dsl-validator-linux-amd64
+.PHONY: binary/linux
+
 test:
 	$(GO) clean -testcache && go test $(GOFLAGS) -run $(TESTS) $(PKG) $(TESTFLAGS)
 .PHONY: test
