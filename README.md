@@ -8,6 +8,18 @@ spicedb-dsl-validator is a CLI tool which parse and validate SpiceDB [schema](ht
 # Build
 `make binary`
 
+## Linux 
+`make binary/linux`
+
+## Darwin
+`make binary/darwin`
+
+## Windows
+`make binary/windows`
+
+## Test
+`make test`
+
 # Usage
 
 Parsed Correctly

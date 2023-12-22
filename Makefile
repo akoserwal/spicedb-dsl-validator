@@ -3,6 +3,13 @@
 
 GO := go
 GOFMT := gofmt
+
+VERSION=$(shell git describe --tags --always --long --dirty)
+EXECUTABLE=spicedb-dsl-validator
+WINDOWS=$(EXECUTABLE)_windows_amd64.exe
+LINUX=$(EXECUTABLE)_linux_amd64
+DARWIN=$(EXECUTABLE)_darwin_amd64
+
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell $(GO) env GOBIN))
 GOBIN=$(shell $(GO) env GOPATH)/bin
@@ -26,14 +33,24 @@ lint:
 .PHONY: lint
 
 binary:
-	$(GO) build
+	$(GO) build -o -ldflags="-s -w -X main.version=$(VERSION)"
+.PHONY: binary
+
+binary/darwin:
+	env GOOS=darwin GOARCH=amd64 $(GO) build -o $(DARWIN) -ldflags="-s -w -X main.version=$(VERSION)"
 .PHONY: binary
 
 binary/linux:
-	GOOS=linux GOARCH=amd64 $(GO) build -o spicedb-dsl-validator-linux-amd64
+	env GOOS=linux GOARCH=amd64 $(GO) build -o $(LINUX) -ldflags="-s -w -X main.version=$(VERSION)"
 .PHONY: binary/linux
+
+binary/windows:
+	env GOOS=windows GOARCH=amd64 $(GO) build -o $(WINDOWS) -ldflags="-s -w -X main.version=$(VERSION)"
+.PHONY: binary/windows
 
 test:
 	$(GO) clean -testcache && go test $(GOFLAGS) -run $(TESTS) $(PKG) $(TESTFLAGS)
 .PHONY: test
 
+clean: ## Remove previous build
+	rm -f $(WINDOWS) $(LINUX) $(DARWIN)
