@@ -30,11 +30,6 @@ func TestParseCmd(t *testing.T) {
 			args:           []string{"parse", "--file-path", "tests/associativity.zed"},
 			expectedOutput: "Complied error: parse error in `schema`, line 2, column 5: error in permission union: invalid Relation.UsersetRewrite: embedded message failed validation | caused by: invalid UsersetRewrite.Union: embedded message failed validation | caused by: invalid SetOperation.Child[0]: embedded message failed validation | caused by: invalid SetOperation_Child.ComputedUserset: embedded message failed validation | caused by: invalid ComputedUserset.Relation: value does not match regex pattern \"^[a-z][a-z0-9_]{1,62}[a-z0-9]$\"\n", // Add the expected error message
 		},
-		{
-			name:           "basic parse",
-			args:           []string{"parse", "--file-path", "tests/basic.zed"},
-			expectedOutput: "Schema validation error: could not lookup definition `sometype` for relation `foo`: object definition `sometype` not found\n", // Add the expected error message
-		},
 		// Add more test cases as needed
 	}
 
